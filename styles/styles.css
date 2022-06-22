@@ -64,6 +64,16 @@ input {
   margin-top: 1rem;
 }
 
+.logout-btn {
+  padding: 0.5rem;
+  border-radius: 5px;
+  background-color: #ec183f;
+  color: whitesmoke;
+  border: none;
+  box-shadow: 3px 3px 5px darkgray;
+  margin-top: 1rem;
+}
+
 .login-btn:hover {
   cursor: pointer;
   background-color: #c21736;
