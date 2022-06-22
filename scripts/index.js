@@ -28,6 +28,99 @@ const baseDeDatos = {
   ],
 };
 
+let clickBotonInicio = document.querySelector(".login-btn");
+let mensajeOculto = document.querySelector(".hidden");
+let emailIngresado = document.querySelector("#email-input");
+let mensajeError = document.querySelector("#error-container");
+let contrasenaIngresada = document.querySelector("#password-input");
+let formulario = document.querySelector("form");
+let tituloBienvenida = document.querySelector("h1");
+let botonCerrarSesion = document.createElement("button");
+botonCerrarSesion.innerHTML = "Cerrar Sesión";
+botonCerrarSesion.type = "button";
+botonCerrarSesion.classList.add("logout-btn");
+
+clickBotonInicio.addEventListener("click", function (event) {
+  mensajeOculto.classList.remove("hidden");
+  setTimeout(function () {
+    validacionEmail(emailIngresado);
+    validacionContrasena(contrasenaIngresada);
+    validacionRegistro(emailIngresado, contrasenaIngresada);
+    event;
+  }, 3000);
+});
+
+function validacionEmail(emailIngresado) {
+  let formatoEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  if (emailIngresado.value.match(formatoEmail)) {
+    return true;
+  } else {
+    mensajeError.classList.remove("hidden");
+    mensajeError.innerHTML =
+      "<small>Alguno de los datos ingresados son incorrectos</small>";
+    return false;
+  }
+}
+
+function validacionContrasena(contrasenaIngresada) {
+  if (contrasenaIngresada.value.length >= 5) {
+    return true;
+  } else {
+    mensajeError.classList.remove("hidden");
+    mensajeError.innerHTML =
+      "<small>Alguno de los datos ingresados son incorrectos</small>";
+    return false;
+  }
+}
+
+function validacionRegistro(emailIngresado, contrasenaIngresada) {
+  baseDeDatos.usuarios.find((usuario) => {
+    if (
+      usuario.email === emailIngresado.value &&
+      usuario.password === contrasenaIngresada.value
+    ) {
+      formulario.classList.add("hidden");
+      tituloBienvenida.innerHTML =
+        "<h1> Bienvenido al sitio " + `${usuario.name}` + " 😀 </h1>";
+      tituloBienvenida.appendChild(botonCerrarSesion);
+      localStorage.setItem("nombre", usuario.name);
+      cerrarSesion();
+      return true;
+    } else {
+      mensajeError.classList.remove("hidden");
+      mensajeError.innerHTML =
+        "<small>Alguno de los datos ingresados son incorrectos</small>";
+      return false;
+    }
+  });
+}
+
+window.addEventListener("load", function () {
+  if (localStorage.getItem("nombre") !== null) {
+    formulario.classList.add("hidden");
+    tituloBienvenida.innerHTML =
+      "<h1> Bienvenido al sitio " +
+      `${localStorage.getItem("nombre")}` +
+      " 😀 </h1>";
+    tituloBienvenida.appendChild(botonCerrarSesion);
+    cerrarSesion();
+}
+
+});
+
+function cerrarSesion() {
+  let clickBotonCerrarSesion = document.querySelector(".logout-btn");
+  clickBotonCerrarSesion.addEventListener("click", function (event) {
+    localStorage.removeItem("nombre");
+    tituloBienvenida.innerHTML = "<h1> Has cerrado la sesión 😀 </h1>";
+    setTimeout(function () {
+      location.reload();
+      event;
+    }, 2000);
+    event;
+  });
+}
+
 // ACTIVIDAD
 
 // Paso a paso:
